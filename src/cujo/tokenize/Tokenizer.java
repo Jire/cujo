@@ -37,7 +37,6 @@ public final class Tokenizer {
 			Data data = dataAnalyzer.analyze(line);
 			if (data != null) {
 				script.getDataRegistry().register(data.getIdentifier(), data);
-				System.out.println(data);
 				continue;
 			}
 		}
