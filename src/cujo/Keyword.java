@@ -2,15 +2,19 @@ package cujo;
 
 public final class Keyword {
 
-	private final String domestic;
+	private final String identifier;
 
-	Keyword(String domestic) {
-		this.domestic = domestic;
+	private Keyword(String identifier) {
+		this.identifier = identifier;
 	}
 
 	@Override
 	public String toString() {
-		return domestic;
+		return identifier;
+	}
+
+	public static Keyword get(String identifier) {
+		return new Keyword(identifier);
 	}
 
 }

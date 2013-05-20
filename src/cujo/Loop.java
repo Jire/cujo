@@ -1,6 +1,10 @@
 package cujo;
 
-public final class Loop {
+public final class Loop extends AbstractToken {
+
+	public Loop(Keyword keyword) {
+		super(keyword);
+	}
 
 	public enum Type implements Token {
 
@@ -9,7 +13,7 @@ public final class Loop {
 		private final Keyword keyword;
 
 		Type() {
-			this.keyword = new Keyword(name().toLowerCase());
+			this.keyword = Keyword.get(name().toLowerCase());
 		}
 
 		@Override

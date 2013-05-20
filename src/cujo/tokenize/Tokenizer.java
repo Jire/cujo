@@ -6,20 +6,22 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import cujo.Data;
+import cujo.Function;
 import cujo.Script;
-import cujo.analyze.ComponentAnalyzer;
-import cujo.analyze.DataAnalyzer;
 
 public final class Tokenizer {
 
 	private final Script script;
 	private final BufferedReader reader;
 
-	private final ComponentAnalyzer<Data> dataAnalyzer = new DataAnalyzer();
+	private final TokenAnalyzer<Data> dataAnalyzer;
+	private final TokenAnalyzer<Function> functionAnalyzer;
 
 	public Tokenizer(Script script) throws FileNotFoundException {
 		this.script = script;
 		this.reader = new BufferedReader(new FileReader(script.getFile()));
+		this.dataAnalyzer = new DataAnalyzer(script);
+		this.functionAnalyzer = new FunctionAnalyzer(script);
 	}
 
 	public Script getScript() {
@@ -34,9 +36,18 @@ public final class Tokenizer {
 		String line;
 		while ((line = readLine()) != null) {
 			// Process data case
-			Data data = dataAnalyzer.analyze(line);
+			Data data = dataAnalyzer.tokenize(line);
 			if (data != null) {
-				script.getDataRegistry().register(data.getIdentifier(), data);
+				script.getDataRegistry().register(data.getKeyword().toString(),
+						data);
+				continue;
+			}
+
+			// Process function case
+			Function function = functionAnalyzer.tokenize(line);
+			if (function != null) {
+				script.getFunctionRegistry().register(
+						function.getKeyword().toString(), function);
 				continue;
 			}
 		}
